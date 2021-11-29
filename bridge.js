@@ -10,7 +10,16 @@ server.listen(port)
 console.log(`Server up at http://localhost:${port}`)
 
 function handleRequest (req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+
   try {
+    if (req.method === 'OPTIONS') {
+      res.setHeader('Allow', 'OPTIONS, GET')
+      res.writeHead(204)
+      res.end()
+      return
+    }
+
     if (req.method !== 'GET') {
       throw new Error('Method not supported')
     }
