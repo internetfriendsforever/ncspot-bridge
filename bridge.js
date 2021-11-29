@@ -10,14 +10,18 @@ server.listen(port)
 console.log(`Server up at http://localhost:${port}`)
 
 function handleRequest (req, res) {
-  const reqUrl = url.parse(req.url)
-  const params = new URLSearchParams(reqUrl.query)
-  const action = params.get('action')
-
   try {
+    if (req.method !== 'GET') {
+      throw new Error('Method not supported')
+    }
+
+    const reqUrl = url.parse(req.url)
+    const params = new URLSearchParams(reqUrl.query)
+    const action = params.get('action')
+
     switch (action) {
       case 'playTrack':
-        jsonResponse(res, playTrack(params.get('track')))
+        return jsonResponse(res, playTrack(params.get('track')))
       break
       default:
         throw new Error('Missing action')
@@ -46,7 +50,8 @@ function playTrack (track) {
 
   const {
     status,
-    error
+    error,
+    output
   } = childProcess.spawnSync(command, args)
 
   if (error) {
@@ -54,7 +59,8 @@ function playTrack (track) {
   }
 
   return {
-    status
+    status,
+    output
   }
 }
 
