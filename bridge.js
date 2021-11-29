@@ -60,7 +60,7 @@ function playTrack (track) {
 
   return {
     status,
-    output
+    output: output.toString()
   }
 }
 
