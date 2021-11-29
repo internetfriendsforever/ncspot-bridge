@@ -38,12 +38,29 @@ function playTrack (track) {
 
   const uri = `string:spotify:track:${track}`
 
-  const command = `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.ncspot /org/mrpis/MediaPlayer2 org.mpris.MediaPlayer2.Player.OpenUri ${uri}`
+  const command = 'dbus-send'
 
-  const stdout = childProcess.execSync(command)
+  const args = [
+    '--print-reply',
+    '--dest=org.mpris.MediaPlayer2.ncspot',
+    '/org/mpris/MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player.OpenUri',
+    uri
+  ]
+
+  const {
+    status,
+    error,
+    output
+  } = childProcess.spawnSync(command, args)
+
+  if (error) {
+    throw error
+  }
 
   return {
-    output: stdout.toString()
+    status,
+    output: output.toString()
   }
 }
 
