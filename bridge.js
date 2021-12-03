@@ -48,6 +48,8 @@ function playTrack (track) {
     throw new Error('Track missing')
   }
 
+  const uri = `string:spotify:track:${track}`
+
   return mprisCommand([
     '--print-reply',
     '--dest=org.mpris.MediaPlayer2.ncspot',
