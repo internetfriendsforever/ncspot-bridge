@@ -89,14 +89,6 @@ function getPlaybackStatus () {
 function mprisCommand (args) {
   const command = 'dbus-send'
 
-  const args = [
-    '--print-reply',
-    '--dest=org.mpris.MediaPlayer2.ncspot',
-    '/org/mpris/MediaPlayer2',
-    'org.mpris.MediaPlayer2.Player.OpenUri',
-    uri
-  ]
-
   const {
     status,
     error,
