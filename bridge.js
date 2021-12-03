@@ -48,10 +48,6 @@ function playTrack (track) {
     throw new Error('Track missing')
   }
 
-  const uri = `string:spotify:track:${track}`
-
-  const command = 'dbus-send'
-
   return mprisCommand([
     '--print-reply',
     '--dest=org.mpris.MediaPlayer2.ncspot',
@@ -62,14 +58,6 @@ function playTrack (track) {
 }
 
 function getPlaybackStatus () {
-  if (!track) {
-    throw new Error('Track missing')
-  }
-
-  const uri = `string:spotify:track:${track}`
-
-  const command = 'dbus-send'
-
   const { output } = mprisCommand([
     '--print-reply',
     '--dest=org.mpris.MediaPlayer2.ncspot',
