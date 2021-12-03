@@ -32,6 +32,9 @@ function handleRequest (req, res) {
       case 'playTrack':
         return jsonResponse(res, playTrack(params.get('track')))
       break
+      case 'getPlaybackStatus':
+        return jsonResponse(res, getPlaybackStatus())
+      break
       default:
         throw new Error('Missing action')
     }
@@ -47,6 +50,43 @@ function playTrack (track) {
 
   const uri = `string:spotify:track:${track}`
 
+  const command = 'dbus-send'
+
+  return mprisCommand([
+    '--print-reply',
+    '--dest=org.mpris.MediaPlayer2.ncspot',
+    '/org/mpris/MediaPlayer2',
+    'org.mpris.MediaPlayer2.Player.OpenUri',
+    uri
+  ])
+}
+
+function getPlaybackStatus () {
+  if (!track) {
+    throw new Error('Track missing')
+  }
+
+  const uri = `string:spotify:track:${track}`
+
+  const command = 'dbus-send'
+
+  const { output } mprisCommand([
+    '--print-reply',
+    '--dest=org.mpris.MediaPlayer2.ncspot',
+    '/org/mpris/MediaPlayer2',
+    'org.freedesktop.DBus.Properties.Get',
+    'string:org.mpris.MediaPlayer2.Player',
+    'string:PlaybackStatus'
+  ])
+
+  const playbackStatusString = output.match(/string "(.+)"/)[1]
+
+  return {
+    playing: playbackStatusString === 'Playing'
+  }
+}
+
+function mprisCommand (args) {
   const command = 'dbus-send'
 
   const args = [
