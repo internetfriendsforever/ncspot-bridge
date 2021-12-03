@@ -70,7 +70,7 @@ function getPlaybackStatus () {
 
   const command = 'dbus-send'
 
-  const { output } mprisCommand([
+  const { output } = mprisCommand([
     '--print-reply',
     '--dest=org.mpris.MediaPlayer2.ncspot',
     '/org/mpris/MediaPlayer2',
